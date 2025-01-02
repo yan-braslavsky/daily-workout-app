@@ -7,7 +7,7 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
   
   logger.log("🔑 Checking API key...");
   logger.log("API Key present:", !!apiKey);
-  logger.log("API Key length:", apiKey?.length);
+  logger.log("API Key length:", apiKey?.length);//minor
   
   if (!apiKey) {
     logger.error("❌ No API key found in environment variables!");
