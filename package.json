@@ -4,10 +4,15 @@
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.4",
+    "axios": "^1.7.9",
+    "colors": "^1.4.0",
     "cra-template-typescript": "1.2.0",
+    "groq-sdk": "^0.3.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-scripts": "^3.0.1",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.0.0",
     "web-vitals": "^4.2.4"
   },
   "homepage": "https://yan-braslavsky.github.io/daily-workout-app",

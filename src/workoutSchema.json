@@ -1,0 +1,49 @@
+{
+    "type": "object",
+    "properties": {
+      "workoutDay": {
+        "type": "string",
+        "description": "The name of the workout day (e.g., 'Back Day')"
+      },
+      "exercises": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the exercise"
+            },
+            "musclesTargeted": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "A list of muscles targeted by the exercise"
+              }
+            },
+            "equipment": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "description": "A list of equipment used in the exercise"
+              }
+            },
+            "description": {
+              "type": "string",
+              "description": "A detailed description of how to perform the exercise"
+            },
+            "sets": {
+              "type": "integer",
+              "description": "The number of sets for the exercise"
+            },
+            "reps": {
+              "type": "string",
+              "description": "The number of repetitions per set (e.g., '8-10')"
+            }
+          },
+          "required": ["name", "musclesTargeted", "equipment", "description", "sets", "reps"]
+        }
+      }
+    },
+    "required": ["workoutDay", "exercises"]
+  }
