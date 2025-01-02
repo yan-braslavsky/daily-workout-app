@@ -8,6 +8,7 @@ import LoadingOverlay from "./components/LoadingOverlay";
 import { logger } from "./utils/logger";
 import ExpandableHeader from './components/ExpandableHeader';
 import WorkoutOptions from './components/WorkoutOptions';
+import equipmentData from './equipment.json';
 
 interface WorkoutOptionsState {
   duration: number;
@@ -21,8 +22,8 @@ function App() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [workoutOptions, setWorkoutOptions] = useState<WorkoutOptionsState | null>(null);
-  const equipmentList = ['Dumbbells', 'Barbell', 'Kettlebell', 'Resistance Bands'];
-  const exerciseGroups = ['Legs', 'Shoulders', 'Chest', 'Back', 'Arms'];
+  const equipmentList = equipmentData.equipment;
+  const exerciseGroups = ['Legs', 'Shoulders', 'Chest', 'Back', 'Arms', 'Abs'];
 
   const generatePrompt = (options: WorkoutOptionsState): string => {
     const selectedEquipment = Object.entries(options.selectedEquipment)

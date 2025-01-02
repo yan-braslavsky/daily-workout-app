@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 
 interface WorkoutOptionsProps {
   equipmentList: string[];
@@ -14,36 +14,26 @@ interface WorkoutOptionsState {
 }
 
 const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exerciseGroups, onOptionsChange }) => {
-  // Initialize state with empty objects to prevent undefined values
-  const [selectedEquipment, setSelectedEquipment] = useState<{ [key: string]: boolean }>({});
-  const [selectedExerciseGroups, setSelectedExerciseGroups] = useState<{ [key: string]: boolean }>({});
   const [duration, setDuration] = useState(30);
   const [intensity, setIntensity] = useState('easy');
+  const [selectedEquipment, setSelectedEquipment] = useState<{ [key: string]: boolean }>(() => 
+    equipmentList.reduce((acc, item) => ({ ...acc, [item]: true }), {})
+  );
+  const [selectedExerciseGroups, setSelectedExerciseGroups] = useState<{ [key: string]: boolean }>(() => 
+    exerciseGroups.reduce((acc, group) => ({ ...acc, [group]: true }), {})
+  );
 
-  // Initialize checkboxes only once when component mounts
-  useEffect(() => {
-    setSelectedEquipment(
-      equipmentList.reduce((acc, item) => ({ ...acc, [item]: true }), {})
-    );
-    setSelectedExerciseGroups(
-      exerciseGroups.reduce((acc, group) => ({ ...acc, [group]: true }), {})
-    );
-  }, []); // Empty dependency array means this runs once on mount
-
-  // Memoize the options change callback
   const handleOptionsUpdate = useCallback(() => {
-    if (Object.keys(selectedEquipment).length && Object.keys(selectedExerciseGroups).length) {
-      onOptionsChange({
-        duration,
-        intensity,
-        selectedEquipment,
-        selectedExerciseGroups,
-      });
-    }
+    onOptionsChange({
+      duration,
+      intensity,
+      selectedEquipment,
+      selectedExerciseGroups,
+    });
   }, [duration, intensity, selectedEquipment, selectedExerciseGroups, onOptionsChange]);
 
-  // Only update parent when state is ready
-  useEffect(() => {
+  // Only update parent when values change
+  React.useEffect(() => {
     handleOptionsUpdate();
   }, [handleOptionsUpdate]);
 
@@ -58,49 +48,69 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
   }, []);
 
   return (
-    <div>
-      <div>
-        <label>Duration:</label>
-        <select value={duration} onChange={(e) => setDuration(Number(e.target.value))}>
-          <option value={30}>30 minutes</option>
-          <option value={60}>60 minutes</option>
-          <option value={90}>90 minutes</option>
-          <option value={120}>120 minutes</option>
-        </select>
+    <div className="space-y-6">
+      <div className="grid grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Duration:</label>
+          <select 
+            value={duration} 
+            onChange={(e) => setDuration(Number(e.target.value))}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value={30}>30 minutes</option>
+            <option value={60}>60 minutes</option>
+            <option value={90}>90 minutes</option>
+            <option value={120}>120 minutes</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Intensity:</label>
+          <select 
+            value={intensity} 
+            onChange={(e) => setIntensity(e.target.value)}
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+          >
+            <option value="easy">Easy</option>
+            <option value="moderate">Moderate</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
       </div>
-      <div>
-        <label>Intensity:</label>
-        <select value={intensity} onChange={(e) => setIntensity(e.target.value)}>
-          <option value="easy">Easy</option>
-          <option value="moderate">Moderate</option>
-          <option value="hard">Hard</option>
-        </select>
-      </div>
-      <div>
-        <label>Equipment:</label>
-        {equipmentList.map(item => (
-          <div key={item}>
-            <input
-              type="checkbox"
-              checked={selectedEquipment[item]}
-              onChange={() => handleCheckboxChange(setSelectedEquipment, item)}
-            />
-            {item}
+
+      <div className="grid grid-cols-2 gap-6">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Equipment:</label>
+          <div className="space-y-2 mt-2">
+            {equipmentList.map(item => (
+              <div key={item} className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedEquipment[item]}
+                  onChange={() => handleCheckboxChange(setSelectedEquipment, item)}
+                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label className="ml-2 text-sm text-gray-600">{item}</label>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <div>
-        <label>Exercise Groups:</label>
-        {exerciseGroups.map(group => (
-          <div key={group}>
-            <input
-              type="checkbox"
-              checked={selectedExerciseGroups[group]}
-              onChange={() => handleCheckboxChange(setSelectedExerciseGroups, group)}
-            />
-            {group}
+        </div>
+
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-700">Exercise Groups:</label>
+          <div className="space-y-2 mt-2">
+            {exerciseGroups.map(group => (
+              <div key={group} className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={selectedExerciseGroups[group]}
+                  onChange={() => handleCheckboxChange(setSelectedExerciseGroups, group)}
+                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                />
+                <label className="ml-2 text-sm text-gray-600">{group}</label>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </div>
   );
