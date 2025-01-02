@@ -47,11 +47,19 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
     }));
   }, []);
 
+  const handleSelectAll = (stateSetter: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>, items: string[]) => {
+    stateSetter(items.reduce((acc, item) => ({ ...acc, [item]: true }), {}));
+  };
+
+  const handleDeselectAll = (stateSetter: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>, items: string[]) => {
+    stateSetter(items.reduce((acc, item) => ({ ...acc, [item]: false }), {}));
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="grid grid-cols-2 gap-6">
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Duration:</label>
+    <div className="space-y-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="space-y-3">
+          <label className="block text-lg font-medium text-gray-700">Duration:</label>
           <select 
             value={duration} 
             onChange={(e) => setDuration(Number(e.target.value))}
@@ -63,8 +71,9 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
             <option value={120}>120 minutes</option>
           </select>
         </div>
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Intensity:</label>
+
+        <div className="space-y-3">
+          <label className="block text-lg font-medium text-gray-700">Intensity:</label>
           <select 
             value={intensity} 
             onChange={(e) => setIntensity(e.target.value)}
@@ -77,9 +86,9 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Equipment:</label>
+          <label className="block text-lg font-medium text-gray-700">Equipment:</label>
           <div className="space-y-2 mt-2">
             {equipmentList.map(item => (
               <div key={item} className="flex items-center">
@@ -96,7 +105,7 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
         </div>
 
         <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">Exercise Groups:</label>
+          <label className="block text-lg font-medium text-gray-700">Exercise Groups:</label>
           <div className="space-y-2 mt-2">
             {exerciseGroups.map(group => (
               <div key={group} className="flex items-center">

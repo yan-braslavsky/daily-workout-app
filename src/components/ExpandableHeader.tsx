@@ -8,33 +8,36 @@ interface ExpandableHeaderProps {
 const ExpandableHeader: React.FC<ExpandableHeaderProps> = ({ children, onGenerate }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
-    <div className="border-b border-gray-200">
-      <div className="flex items-center justify-between px-4 py-3">
-        <div 
-          onClick={toggleExpand} 
-          className="flex-1 cursor-pointer"
-        >
-          <h2 className="text-lg font-semibold">Workout Generation Options</h2>
+    <div className="border-b border-gray-200 bg-white shadow-sm">
+      <div 
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="flex items-center px-4 py-3 cursor-pointer hover:bg-gray-50 transition-colors duration-200"
+      >
+        <h2 className="text-xl font-semibold text-gray-800">Configure workout</h2>
+        <div className={`ml-auto transform transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}>
+          <svg className="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
         </div>
-        {!isExpanded && (
-          <button
-            onClick={onGenerate}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Generate Workout
-          </button>
-        )}
       </div>
-      {isExpanded && (
-        <div className="p-4 border-t">
+      <div
+        className={`transition-all duration-200 ease-in-out overflow-hidden ${
+          isExpanded ? 'max-h-[2000px] opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="p-4 border-t border-gray-200">
           {children}
+          <div className="mt-6 flex justify-center">
+            <button
+              onClick={onGenerate}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg text-lg transition-colors duration-200 w-full sm:w-auto"
+            >
+              Generate Workout
+            </button>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 };
