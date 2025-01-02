@@ -7,14 +7,14 @@ async function fetchYoutubeInfo(exerciseName: string): Promise<{ videoUrl: strin
   try {
     const videoData = await searchExerciseVideo(exerciseName);
     return {
-      videoUrl: `https://www.youtube.com/watch?v=${videoData.videoId}`,
+      videoUrl: videoData.shortsUrl, // Use the shorts-specific URL
       thumbnailUrl: videoData.thumbnailUrl
     };
   } catch (error) {
     logger.error(`Failed to fetch YouTube info for ${exerciseName}:`, error);
-    // Fallback to search results page if API fails
+    // Fallback to shorts search results
     return {
-      videoUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(exerciseName)}`,
+      videoUrl: `https://www.youtube.com/hashtag/shorts?q=${encodeURIComponent(exerciseName)}`,
       thumbnailUrl: "https://placehold.co/200x120"
     };
   }

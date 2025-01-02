@@ -7,6 +7,7 @@ interface YouTubeSearchResult {
   videoId: string;
   title: string;
   thumbnailUrl: string;
+  shortsUrl: string; // Add shortsUrl to the interface
 }
 
 export async function searchExerciseVideo(exerciseName: string): Promise<YouTubeSearchResult> {
@@ -21,11 +22,12 @@ export async function searchExerciseVideo(exerciseName: string): Promise<YouTube
       params: {
         part: 'snippet',
         maxResults: 1,
-        q: `${exerciseName} exercise tutorial form`,
+        q: `${exerciseName} exercise form #shorts`, // Add #shorts to target Short videos
         key: apiKey,
         type: 'video',
-        videoDuration: 'medium', // Filter for medium length videos
+        videoDuration: 'short', // Change to short duration
         videoEmbeddable: true,
+        order: 'rating', // Get highest rated content first
       },
     });
 
@@ -35,10 +37,15 @@ export async function searchExerciseVideo(exerciseName: string): Promise<YouTube
       throw new Error('No video results found');
     }
 
+    // Construct proper Shorts URL
+    const videoId = item.id.videoId;
+    const shortsUrl = `https://www.youtube.com/shorts/${videoId}`;
+    
     return {
-      videoId: item.id.videoId,
+      videoId,
       title: item.snippet.title,
       thumbnailUrl: item.snippet.thumbnails.high.url,
+      shortsUrl, // Add shortsUrl to the return object
     };
   } catch (error) {
     logger.error('YouTube API Error:', error);

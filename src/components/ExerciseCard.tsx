@@ -11,16 +11,22 @@ function ExerciseCard({ exercise }: ExerciseCardProps) {
   return (
     <div className="exercise-card border rounded p-4 shadow bg-white transition-all duration-200 hover:scale-[1.03] hover:shadow-lg">
       <a
-        href={exercise.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.name)}`}
+        href={exercise.videoUrl}
         target="_blank"
         rel="noopener noreferrer"
-        className="block"
+        className="block aspect-[9/16] relative overflow-hidden mb-2"
       >
         <img
-          src={exercise.thumbnailUrl || "https://placehold.co/200x120"}
+          src={exercise.thumbnailUrl}
           alt={exercise.name}
-          className="mb-2"
+          className="w-full h-full object-cover rounded"
+          loading="lazy"
         />
+        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-20 hover:bg-opacity-30">
+          <span className="bg-red-600 text-white px-2 py-1 rounded text-sm">
+            Watch Short
+          </span>
+        </div>
       </a>
       <h2 className="text-xl font-bold mb-1">{exercise.name}</h2>
       <p className="text-sm text-gray-700 mb-1">{exercise.description}</p>
