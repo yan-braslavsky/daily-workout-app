@@ -1,16 +1,13 @@
 {
   "files": {
-    "main.css": "/daily-workout-app/static/css/main.d2535957.chunk.css",
-    "main.js": "/daily-workout-app/static/js/main.fb693c10.chunk.js",
-    "main.js.map": "/daily-workout-app/static/js/main.fb693c10.chunk.js.map",
-    "runtime~main.js": "/daily-workout-app/static/js/runtime~main.fc05d992.js",
-    "runtime~main.js.map": "/daily-workout-app/static/js/runtime~main.fc05d992.js.map",
-    "static/js/2.bbc244fd.chunk.js": "/daily-workout-app/static/js/2.bbc244fd.chunk.js",
-    "static/js/2.bbc244fd.chunk.js.map": "/daily-workout-app/static/js/2.bbc244fd.chunk.js.map",
+    "main.css": "/daily-workout-app/static/css/main.dfbf6708.css",
+    "main.js": "/daily-workout-app/static/js/main.89a629a4.js",
     "index.html": "/daily-workout-app/index.html",
-    "precache-manifest.f113dc9f1c2a7875ebeebf1893c1d2bf.js": "/daily-workout-app/precache-manifest.f113dc9f1c2a7875ebeebf1893c1d2bf.js",
-    "service-worker.js": "/daily-workout-app/service-worker.js",
-    "static/css/main.d2535957.chunk.css.map": "/daily-workout-app/static/css/main.d2535957.chunk.css.map",
-    "static/media/logo.svg": "/daily-workout-app/static/media/logo.06e73328.svg"
-  }
+    "main.dfbf6708.css.map": "/daily-workout-app/static/css/main.dfbf6708.css.map",
+    "main.89a629a4.js.map": "/daily-workout-app/static/js/main.89a629a4.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.dfbf6708.css",
+    "static/js/main.89a629a4.js"
+  ]
 }
