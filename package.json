@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^5.16.4",
     "cra-template-typescript": "1.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -10,9 +11,9 @@
     "web-vitals": "^4.2.4"
   },
   "homepage": "https://yan-braslavsky.github.io/daily-workout-app",
-"scripts": {
-  "predeploy": "npm run build",
-  "deploy": "gh-pages -d build",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -37,8 +38,10 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react": "^16.1.0",
     "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
+    "@types/testing-library__react": "^10.0.1",
     "autoprefixer": "^10.4.20",
     "gh-pages": "^6.2.0",
     "postcss": "^8.4.49",
