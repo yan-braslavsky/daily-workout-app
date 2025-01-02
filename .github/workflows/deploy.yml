@@ -22,7 +22,9 @@ jobs:
         run: npm install
 
       - name: Set environment variables
-        run: echo "REACT_APP_GROQ_API_KEY=${{ secrets.REACT_APP_GROQ_API_KEY }}" >> $GITHUB_ENV
+        run: |
+          echo "REACT_APP_GROQ_API_KEY=${{ secrets.REACT_APP_GROQ_API_KEY }}" >> $GITHUB_ENV
+          echo "REACT_APP_YOUTUBE_API_KEY=${{ secrets.REACT_APP_YOUTUBE_API_KEY }}" >> $GITHUB_ENV
 
       - name: Run tests
         run: npm test

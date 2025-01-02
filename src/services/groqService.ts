@@ -1,6 +1,24 @@
 import axios from "axios";
-import { WorkoutResponse } from "../types/Exercise";
+import { WorkoutResponse, Exercise } from "../types/Exercise"; // Import Exercise type
 import { logger } from "../utils/logger";
+import { searchExerciseVideo } from './youtubeService';
+
+async function fetchYoutubeInfo(exerciseName: string): Promise<{ videoUrl: string; thumbnailUrl: string }> {
+  try {
+    const videoData = await searchExerciseVideo(exerciseName);
+    return {
+      videoUrl: `https://www.youtube.com/watch?v=${videoData.videoId}`,
+      thumbnailUrl: videoData.thumbnailUrl
+    };
+  } catch (error) {
+    logger.error(`Failed to fetch YouTube info for ${exerciseName}:`, error);
+    // Fallback to search results page if API fails
+    return {
+      videoUrl: `https://www.youtube.com/results?search_query=${encodeURIComponent(exerciseName)}`,
+      thumbnailUrl: "https://placehold.co/200x120"
+    };
+  }
+}
 
 export async function generateWorkouts(prompt: string, equipment: string[]): Promise<WorkoutResponse> {
   const apiKey = process.env.REACT_APP_GROQ_API_KEY;
@@ -56,10 +74,20 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
     logger.log("📝 Generated content:", generatedContent);
     
     try {
-      const parsedData = JSON.parse(generatedContent);
+      const parsedData = JSON.parse(generatedContent) as WorkoutResponse;
       logger.log("✅ Successfully parsed JSON response");
       logger.log("🎯 Final workout data:", JSON.stringify(parsedData, null, 2));
-      return parsedData as WorkoutResponse;
+      
+      // Populate each exercise with YouTube info
+      const updatedExercises = await Promise.all(
+        parsedData.exercises.map(async (ex: Exercise) => {
+          const youtubeData = await fetchYoutubeInfo(ex.name);
+          return { ...ex, ...youtubeData };
+        })
+      );
+      parsedData.exercises = updatedExercises;
+
+      return parsedData;
     } catch (parseError) {
       logger.error("❌ Failed to parse API response as JSON:", parseError);
       logger.error("📄 Problematic content:", generatedContent);

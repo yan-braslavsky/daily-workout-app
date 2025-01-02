@@ -11,15 +11,13 @@ function ExerciseCard({ exercise }: ExerciseCardProps) {
   return (
     <div className="exercise-card border rounded p-4 shadow bg-white transition-all duration-200 hover:scale-[1.03] hover:shadow-lg">
       <a
-        href={`https://www.youtube.com/results?search_query=${encodeURIComponent(
-          exercise.name
-        )}`}
+        href={exercise.videoUrl || `https://www.youtube.com/results?search_query=${encodeURIComponent(exercise.name)}`}
         target="_blank"
         rel="noopener noreferrer"
         className="block"
       >
         <img
-          src="https://placehold.co/200x120"
+          src={exercise.thumbnailUrl || "https://placehold.co/200x120"}
           alt={exercise.name}
           className="mb-2"
         />

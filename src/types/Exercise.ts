@@ -5,6 +5,8 @@ export interface Exercise {
   description: string;
   sets: number;
   reps: string;
+  videoUrl?: string;
+  thumbnailUrl?: string;
 }
 
 export interface WorkoutResponse {
