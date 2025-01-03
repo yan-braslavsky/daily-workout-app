@@ -33,8 +33,10 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
   }
 
   const schema = require('../workoutSchema.json');
-  const systemPrompt = `You are a fitness expert. Generate a workout routine as JSON that strictly follows this schema: ${JSON.stringify(schema)}`;
-  
+  const systemPrompt = `You are a fitness expert. Generate a workout routine as JSON that strictly follows this schema: ${JSON.stringify(schema)}. 
+                        Ensure that the "workoutDay" name is relevant to the selected options and is no longer than 3-4 words. 
+                        Return a single workout day with a list of exercises.`;
+
   const requestPayload = {
     messages: [
       { role: "system", content: systemPrompt },
@@ -47,7 +49,7 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
     ],
     model: "mixtral-8x7b-32768",
     temperature: 0.7,
-    max_tokens: 4000
+    max_tokens: 8000
   };
 
   logger.log("📝 Request payload:", JSON.stringify(requestPayload, null, 2));
@@ -74,6 +76,11 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
     logger.log("📝 Generated content:", generatedContent);
     
     try {
+      // Validate JSON response before parsing
+      if (!generatedContent.trim().endsWith('}')) {
+        throw new Error('Incomplete JSON response');
+      }
+
       const parsedData = JSON.parse(generatedContent) as WorkoutResponse;
       logger.log("✅ Successfully parsed JSON response");
       logger.log("🎯 Final workout data:", JSON.stringify(parsedData, null, 2));
