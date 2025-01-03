@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/daily-workout-app/static/css/main.5dcb398f.css",
-    "main.js": "/daily-workout-app/static/js/main.700dd98f.js",
+    "main.js": "/daily-workout-app/static/js/main.27fff899.js",
     "index.html": "/daily-workout-app/index.html",
     "main.5dcb398f.css.map": "/daily-workout-app/static/css/main.5dcb398f.css.map",
-    "main.700dd98f.js.map": "/daily-workout-app/static/js/main.700dd98f.js.map"
+    "main.27fff899.js.map": "/daily-workout-app/static/js/main.27fff899.js.map"
   },
   "entrypoints": [
     "static/css/main.5dcb398f.css",
-    "static/js/main.700dd98f.js"
+    "static/js/main.27fff899.js"
   ]
 }
