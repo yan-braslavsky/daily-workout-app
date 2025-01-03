@@ -47,6 +47,14 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
     }));
   }, []);
 
+  const handleSelectAll = useCallback((stateSetter: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>, items: string[]) => {
+    stateSetter(items.reduce((acc, item) => ({ ...acc, [item]: true }), {}));
+  }, []);
+
+  const handleDeselectAll = useCallback((stateSetter: React.Dispatch<React.SetStateAction<{ [key: string]: boolean }>>, items: string[]) => {
+    stateSetter(items.reduce((acc, item) => ({ ...acc, [item]: false }), {}));
+  }, []);
+
   return (
     <div className="space-y-8">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,6 +89,20 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">Equipment:</label>
+          <div className="flex space-x-2 mt-2">
+            <button 
+              onClick={() => handleSelectAll(setSelectedEquipment, equipmentList)}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+              Select All
+            </button>
+            <button 
+              onClick={() => handleDeselectAll(setSelectedEquipment, equipmentList)}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md"
+            >
+              Deselect All
+            </button>
+          </div>
           <div className="space-y-2 mt-2">
             {equipmentList.map(item => (
               <div key={item} className="flex items-center">
@@ -98,6 +120,20 @@ const WorkoutOptions: React.FC<WorkoutOptionsProps> = ({ equipmentList, exercise
 
         <div className="space-y-2">
           <label className="block text-lg font-medium text-gray-700">Exercise Groups:</label>
+          <div className="flex space-x-2 mt-2">
+            <button 
+              onClick={() => handleSelectAll(setSelectedExerciseGroups, exerciseGroups)}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md"
+            >
+              Select All
+            </button>
+            <button 
+              onClick={() => handleDeselectAll(setSelectedExerciseGroups, exerciseGroups)}
+              className="px-4 py-2 bg-gray-500 text-white rounded-md"
+            >
+              Deselect All
+            </button>
+          </div>
           <div className="space-y-2 mt-2">
             {exerciseGroups.map(group => (
               <div key={group} className="flex items-center">

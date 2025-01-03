@@ -78,6 +78,34 @@ export async function generateWorkouts(prompt: string, equipment: string[]): Pro
       logger.log("✅ Successfully parsed JSON response");
       logger.log("🎯 Final workout data:", JSON.stringify(parsedData, null, 2));
       
+      // Validate the parsed data structure
+      if (!parsedData || typeof parsedData !== 'object') {
+        throw new Error('Parsed data is not an object');
+      }
+      if (!parsedData.exercises || !Array.isArray(parsedData.exercises)) {
+        throw new Error('Parsed data does not contain an exercises array');
+      }
+      parsedData.exercises.forEach((exercise, index) => {
+        if (!exercise.name || typeof exercise.name !== 'string') {
+          throw new Error(`Exercise at index ${index} does not have a valid name`);
+        }
+        if (!exercise.musclesTargeted || !Array.isArray(exercise.musclesTargeted)) {
+          throw new Error(`Exercise at index ${index} does not have a valid musclesTargeted array`);
+        }
+        if (!exercise.equipment || !Array.isArray(exercise.equipment)) {
+          throw new Error(`Exercise at index ${index} does not have a valid equipment array`);
+        }
+        if (!exercise.description || typeof exercise.description !== 'string') {
+          throw new Error(`Exercise at index ${index} does not have a valid description`);
+        }
+        if (!exercise.sets || typeof exercise.sets !== 'number') {
+          throw new Error(`Exercise at index ${index} does not have a valid sets number`);
+        }
+        if (!exercise.reps || typeof exercise.reps !== 'string') {
+          throw new Error(`Exercise at index ${index} does not have a valid reps string`);
+        }
+      });
+
       // Populate each exercise with YouTube info
       const updatedExercises = await Promise.all(
         parsedData.exercises.map(async (ex: Exercise) => {
