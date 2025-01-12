@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { Exercise } from "../types/Exercise";
 
 interface ExerciseCardProps {
@@ -6,10 +6,31 @@ interface ExerciseCardProps {
 }
 
 function ExerciseCard({ exercise }: ExerciseCardProps) {
-  const [completed, setCompleted] = useState<boolean>(false);
+  const [completedSets, setCompletedSets] = useState<boolean[]>(
+    new Array(exercise.sets).fill(false)
+  );
+
+  const isFullyCompleted = useMemo(() => 
+    completedSets.every(set => set),
+    [completedSets]
+  );
+
+  const handleSetToggle = (index: number) => {
+    const newCompletedSets = [...completedSets];
+    newCompletedSets[index] = !newCompletedSets[index];
+    setCompletedSets(newCompletedSets);
+  };
 
   return (
-    <div className="exercise-card border rounded p-4 shadow bg-white transition-all duration-200 hover:scale-[1.03] hover:shadow-lg">
+    <div className={`exercise-card border rounded p-4 shadow bg-white transition-all duration-200 hover:scale-[1.03] hover:shadow-lg relative
+      ${isFullyCompleted ? 'opacity-90 bg-gray-200' : ''}`}>
+      {isFullyCompleted && (
+        <div className="absolute inset-0 bg-gray-900/70 z-10 rounded flex items-center justify-center">
+          <span className="bg-green-600 text-white px-6 py-3 rounded-lg text-xl font-bold transform rotate-[-5deg] shadow-lg">
+            COMPLETED
+          </span>
+        </div>
+      )}
       <a
         href={exercise.videoUrl}
         target="_blank"
@@ -41,15 +62,19 @@ function ExerciseCard({ exercise }: ExerciseCardProps) {
           ))}
         </div>
       </div>
-      <label className="inline-flex items-center">
-        <input
-          type="checkbox"
-          checked={completed}
-          onChange={() => setCompleted(!completed)}
-          className="mr-2"
-        />
-        Set Complete
-      </label>
+      <div className="mt-4 flex flex-wrap gap-2 justify-center">
+        {completedSets.map((isCompleted, idx) => (
+          <label key={idx} className="flex flex-col items-center justify-center">
+            <input
+              type="checkbox"
+              checked={isCompleted}
+              onChange={() => handleSetToggle(idx)}
+              className="w-8 h-8 accent-green-600 cursor-pointer"
+            />
+            <span className="text-sm mt-1">Set {idx + 1}</span>
+          </label>
+        ))}
+      </div>
     </div>
   );
 }
