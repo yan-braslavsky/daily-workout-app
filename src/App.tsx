@@ -9,6 +9,7 @@ import { logger } from "./utils/logger";
 import ExpandableHeader from './components/ExpandableHeader';
 import WorkoutOptions from './components/WorkoutOptions';
 import equipmentData from './equipment.json';
+import SaveLoadHeader from './components/SaveLoadHeader';
 
 interface WorkoutOptionsState {
   duration: number;
@@ -76,6 +77,10 @@ function App() {
           onOptionsChange={handleOptionsChange}
         />
       </ExpandableHeader>
+      <SaveLoadHeader 
+        workouts={workouts}
+        onLoad={setWorkouts}
+      />
       <main className="flex-1 p-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {workouts.map((item, idx) => (
           <ExerciseCard key={idx} exercise={item} />
