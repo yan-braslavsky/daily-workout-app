@@ -35,9 +35,9 @@ function App() {
       .filter(([_, selected]) => selected)
       .map(([group]) => group);
 
-    return `Create a ${options.intensity} intensity workout for ${options.duration} minutes` +
-           `${selectedGroups.length ? ` focusing on ${selectedGroups.join(', ')}` : ''}` +
-           `${selectedEquipment.length ? ` using ${selectedEquipment.join(', ')}` : ''}`;
+    return `Create a ${options.intensity} intensity workout for ${options.duration} minutes`
+      + `${selectedGroups.length ? ` focusing on ${selectedGroups.join(', ')}` : ''}`
+      + `${selectedEquipment.length ? ` using ${selectedEquipment.join(', ')}` : ''}`;
   };
 
   const handleOptionsChange = useCallback((options: WorkoutOptionsState) => {
@@ -59,6 +59,18 @@ function App() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleUpdateUrls = (index: number, newVideoUrl: string, newThumbnailUrl: string) => {
+    setWorkouts((prev) => {
+      const updated = [...prev];
+      updated[index] = {
+        ...updated[index],
+        videoUrl: newVideoUrl,
+        thumbnailUrl: newThumbnailUrl,
+      };
+      return updated;
+    });
   };
 
   return (
@@ -83,7 +95,11 @@ function App() {
       />
       <main className="flex-1 p-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {workouts.map((item, idx) => (
-          <ExerciseCard key={idx} exercise={item} />
+          <ExerciseCard
+            key={idx}
+            exercise={item}
+            onUpdate={(videoUrl, thumbnailUrl) => handleUpdateUrls(idx, videoUrl, thumbnailUrl)}
+          />
         ))}
       </main>
       <Footer />

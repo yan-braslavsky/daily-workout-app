@@ -3,15 +3,35 @@ import { Exercise } from "../types/Exercise";
 
 interface ExerciseCardProps {
   exercise: Exercise;
+  onUpdate?: (videoUrl: string, thumbnailUrl: string) => void;
 }
 
-function ExerciseCard({ exercise }: ExerciseCardProps) {
+function ExerciseCard({ exercise, onUpdate }: ExerciseCardProps) {
   const [completedSets, setCompletedSets] = useState<boolean[]>(
     new Array(exercise.sets).fill(false)
   );
+  const [videoUrl, setVideoUrl] = useState<string>(exercise.videoUrl ?? "");
+  const [thumbnailUrl, setThumbnailUrl] = useState<string>(exercise.thumbnailUrl ?? "");
+  const [isEditing, setIsEditing] = useState(false);
+  const [tempUrl, setTempUrl] = useState<string>("");
 
-  const isFullyCompleted = useMemo(() => 
-    completedSets.every(set => set),
+  const extractYouTubeId = (url: string): string => {
+    const match = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+    return match ? match[1] : "";
+  };
+
+  const handleSaveUrl = () => {
+    const newId = extractYouTubeId(tempUrl);
+    if (newId) {
+      setVideoUrl(tempUrl);
+      setThumbnailUrl(`https://img.youtube.com/vi/${newId}/0.jpg`);
+      onUpdate?.(tempUrl, `https://img.youtube.com/vi/${newId}/0.jpg`);
+    }
+    setIsEditing(false);
+  };
+
+  const isFullyCompleted = useMemo(
+    () => completedSets.every((set) => set),
     [completedSets]
   );
 
@@ -32,13 +52,13 @@ function ExerciseCard({ exercise }: ExerciseCardProps) {
         </div>
       )}
       <a
-        href={exercise.videoUrl}
+        href={videoUrl}
         target="_blank"
         rel="noopener noreferrer"
         className="block aspect-[9/16] relative overflow-hidden mb-2"
       >
         <img
-          src={exercise.thumbnailUrl}
+          src={thumbnailUrl}
           alt={exercise.name}
           className="w-full h-full object-cover rounded"
           loading="lazy"
@@ -75,6 +95,43 @@ function ExerciseCard({ exercise }: ExerciseCardProps) {
           </label>
         ))}
       </div>
+      <button
+        onClick={() => {
+          setTempUrl(videoUrl);
+          setIsEditing(true);
+        }}
+        className="bg-yellow-400 hover:bg-yellow-500 text-white px-3 py-1 rounded text-sm"
+      >
+        Edit
+      </button>
+      {isEditing && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white p-4 rounded shadow">
+            <label className="block mb-2">
+              New YouTube URL:
+              <input
+                value={tempUrl}
+                onChange={(e) => setTempUrl(e.target.value)}
+                className="w-full border p-1"
+              />
+            </label>
+            <div className="flex justify-end gap-2 mt-2">
+              <button
+                onClick={() => setIsEditing(false)}
+                className="bg-gray-300 px-3 py-1 rounded"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSaveUrl}
+                className="bg-green-500 text-white px-3 py-1 rounded"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
